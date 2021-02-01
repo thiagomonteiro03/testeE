@@ -9,40 +9,43 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.request.RequestOptions
+import kotlinx.android.synthetic.main.fragment_event.view.*
 import java.sql.Date
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
-class EventAdapter(
-    private val eventList: ArrayList<Event>,
-    private val listener: OnItemClickListener
-) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(
-            R.layout.fragment_event,
-            parent,
-            false
-        )
-        return EventViewHolder(itemView)
-    }
-    override fun getItemCount() = eventList.size
+class EventAdapter(private val items: ArrayList<Event>) : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
+    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+        private val eventName = view.event_name
+        val eventPrice = view.event_price!!
+        val eventDate = view.event_date!!
+        val eventImage = view.event_image!!
 
-    override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
-        val currentItem = eventList[position]
-
-        Glide.with(holder.imageView.context).load(currentItem.image).transition(withCrossFade())
-            .placeholder(R.drawable.ic_launcher_foreground).apply(RequestOptions.noAnimation())
-            .into(holder.imageView)
-        holder.textView1.text = currentItem.title
-        holder.textView2.text = getPrice(currentItem.price)
-        holder.textView3.text = getDateTime(currentItem.date)
+        fun bind(event: Event) {
+            eventName.text = event.title
+        }
     }
 
     fun update(events: List<Event>) {
-        eventList.clear()
-        eventList.addAll(events)
+        items.clear()
+        items.addAll(events)
         notifyDataSetChanged()
     }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(items[position])
+        Glide.with(holder.eventImage.context).load(items[position].image).transition(withCrossFade())
+            .placeholder(R.drawable.ic_launcher_foreground).apply(RequestOptions.noAnimation())
+            .into(holder.eventImage)
+        holder.eventPrice.text = getPrice(items[position].price)
+        holder.eventDate.text = getDateTime(items[position].date)
+    }
+
+    override fun getItemCount(): Int = items.size
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+        LayoutInflater.from(parent.context).inflate(R.layout.fragment_event, parent, false)
+    )
 
     private fun getDateTime(s: Long): String? {
         try {
@@ -60,31 +63,6 @@ class EventAdapter(
         credits = credits.replace(".", ",")
 
         return credits
-    }
-
-    inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener{
-        val imageView: ImageView = itemView.findViewById(R.id.event_image)
-        val textView1: TextView = itemView.findViewById(R.id.event_name)
-        val textView2: TextView = itemView.findViewById(R.id.event_price)
-        val textView3: TextView = itemView.findViewById(R.id.event_date)
-
-
-        init {
-            itemView.setOnClickListener(this)
-        }
-
-        override fun onClick(p0: View?) {
-            val position: Int = adapterPosition
-            if (position != RecyclerView.NO_POSITION) {
-                listener.onItemClick(position)
-            }
-        }
-    }
-
-    interface OnItemClickListener{
-        fun onItemClick(position: Int)
-
     }
 
 }
