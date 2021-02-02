@@ -25,8 +25,8 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.fetchEvents()
 
-        viewModel.events.observe(this, Observer {countries ->
-            countries?.let {
+        viewModel.events.observe(this, Observer {events ->
+            events?.let {
                 eventAdapter.update(it)
             }
         })
