@@ -23,7 +23,9 @@ class EventAdapter(private val items: ArrayList<Event>) : RecyclerView.Adapter<E
 
         fun bind(event: Event) {
             eventName.text = event.title
+
         }
+
     }
 
     fun update(events: List<Event>) {
@@ -47,6 +49,8 @@ class EventAdapter(private val items: ArrayList<Event>) : RecyclerView.Adapter<E
         LayoutInflater.from(parent.context).inflate(R.layout.fragment_event, parent, false)
     )
 
+
+
     private fun getDateTime(s: Long): String? {
         try {
             val sdf = SimpleDateFormat("dd/MM/yyyy")
@@ -64,5 +68,6 @@ class EventAdapter(private val items: ArrayList<Event>) : RecyclerView.Adapter<E
 
         return credits
     }
+
 
 }
