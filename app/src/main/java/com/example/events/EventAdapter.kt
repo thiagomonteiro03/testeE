@@ -1,10 +1,12 @@
 package com.example.events
 
+import android.app.ActivityOptions
+import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
@@ -15,15 +17,23 @@ import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
 class EventAdapter(private val items: ArrayList<Event>) : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
-    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: View): RecyclerView.ViewHolder(view), View.OnClickListener {
         private val eventName = view.event_name
         val eventPrice = view.event_price!!
+        override fun onClick(p0: View?) {
+            val position: Int = adapterPosition
+            if(position != RecyclerView.NO_POSITION) Log.i("clickTest: ", "Position $position as clicked.")
+        }
+
         val eventDate = view.event_date!!
         val eventImage = view.event_image!!
 
+        init {
+            itemView.setOnClickListener(this)
+        }
+
         fun bind(event: Event) {
             eventName.text = event.title
-
         }
 
     }
@@ -70,4 +80,7 @@ class EventAdapter(private val items: ArrayList<Event>) : RecyclerView.Adapter<E
     }
 
 
+
+
 }
+

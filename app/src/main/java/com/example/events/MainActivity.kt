@@ -2,14 +2,16 @@ package com.example.events
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
-    lateinit var viewModel: MainViewModel
-    val eventAdapter = EventAdapter(arrayListOf())
+class MainActivity : AppCompatActivity(){
+    private lateinit var viewModel: MainViewModel
+    private val eventAdapter = EventAdapter(arrayListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
