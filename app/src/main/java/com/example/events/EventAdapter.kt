@@ -24,7 +24,6 @@ class EventAdapter(private val items: ArrayList<Event>) : RecyclerView.Adapter<E
         override fun onClick(view: View?) {
             val position: Int = adapterPosition
             if(position != RecyclerView.NO_POSITION) {
-                Log.i("clickTest: ", "Position $position as clicked.")
                 val intent = Intent(view?.context, EventActivity::class.java)
                 intent.putExtra("position", position)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
