@@ -19,7 +19,7 @@ class EventViewModel : ViewModel() {
     private val _title = MutableLiveData<String>()
     private val _price = MutableLiveData<String>()
     private val _description = MutableLiveData<String>()
-
+    private val _image = ObservableField<String>()
     val events: LiveData<List<Event>>
         get() = mEvents
     val date: LiveData<String>
@@ -30,6 +30,8 @@ class EventViewModel : ViewModel() {
         get() = _price
     val description: LiveData<String>
         get() = _description
+    val image: ObservableField<String>
+        get() = _image
 
     fun getEvent(id : Int){
         viewModelScope.launch {
@@ -42,6 +44,7 @@ class EventViewModel : ViewModel() {
                 _title.value = event.title
                 _price.value = getPrice(event.price)
                 _description.value = event.description
+                image.set(event.image)
             }
         }
     }
