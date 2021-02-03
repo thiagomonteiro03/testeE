@@ -1,29 +1,31 @@
 package com.example.events
 
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.view.View
+import androidx.core.content.ContextCompat.startActivity
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.sql.Date
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
-class EventViewModel : ViewModel(), OnMapReadyCallback {
+class EventViewModel  : ViewModel() {
 
-    private lateinit var mMap: GoogleMap
     private val service = EventService()
     private val mEvents = MutableLiveData<List<Event>>()
     private val _date = MutableLiveData<String>()
     private val _title = MutableLiveData<String>()
     private val _price = MutableLiveData<String>()
     private val _description = MutableLiveData<String>()
+    private val _position = MutableLiveData<String>()
     private val _latitude = MutableLiveData<Double>()
     private val _longitude = MutableLiveData<Double>()
     private val _image = ObservableField<String>()
@@ -38,6 +40,8 @@ class EventViewModel : ViewModel(), OnMapReadyCallback {
         get() = _price
     val description: LiveData<String>
         get() = _description
+    val position: LiveData<String>
+        get() = _position
     private val latitude: LiveData<Double>
         get() = _latitude
     private val longitude: LiveData<Double>
@@ -52,16 +56,27 @@ class EventViewModel : ViewModel(), OnMapReadyCallback {
 
             if (response.isSuccessful) {
                     mEvents.value = response.body()
-                val event = mEvents.value!![id]
+                val event = withContext(Dispatchers.Default) { mEvents.value!![id] }
                 _date.value = getDateTime(event.date)
                 _title.value = event.title
                 _price.value = getPrice(event.price)
                 _description.value = event.description
                 _longitude.value = event.longitude
                 _latitude.value = event.latitude
+                _position.value = event.id
+
                 image.set(event.image)
             }
         }
+    }
+
+    fun shareButton(view : View, context: Context, bundle: Bundle){
+        val shareIntent = Intent().apply {
+            this.action = Intent.ACTION_SEND
+            this.putExtra(Intent.EXTRA_TEXT, "lala" )
+            this.type = "text/plain"
+        }
+        startActivity(context, shareIntent, bundle)
     }
 
     private fun getDateTime(s: Long): String? {
@@ -80,14 +95,6 @@ class EventViewModel : ViewModel(), OnMapReadyCallback {
         credits = credits.replace(".", ",")
 
         return credits
-    }
-
-    override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-        val eventLocalAPI = LatLng(2.0, 2.0)
-        mMap.addMarker(MarkerOptions().position(eventLocalAPI).title("Marker"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(eventLocalAPI))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(eventLocalAPI, 18F))
     }
 
 }
