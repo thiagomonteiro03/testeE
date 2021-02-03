@@ -2,35 +2,17 @@ package com.example.events
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_main.*
+import com.example.events.ui.main.MainFragment
 
-class MainActivity : AppCompatActivity(){
-    private lateinit var viewModel: MainViewModel
-    private val eventAdapter = EventAdapter(arrayListOf())
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        viewModel = ViewModelProvider(this)
-            .get(MainViewModel::class.java)
-
-        event_list.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = eventAdapter
+        setContentView(R.layout.main_activity)
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, MainFragment.newInstance())
+                    .commitNow()
         }
-
-        viewModel.fetchEvents()
-
-        viewModel.events.observe(this, Observer {events ->
-            events?.let {
-                eventAdapter.update(it)
-            }
-        })
     }
 }

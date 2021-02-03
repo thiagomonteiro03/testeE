@@ -1,15 +1,13 @@
-package com.example.events
+package com.example.events.ui.main
 
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
-import android.view.View
-import androidx.core.content.ContextCompat.startActivity
+
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.events.Event
+import com.example.events.EventService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -17,7 +15,7 @@ import java.sql.Date
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
-class EventViewModel  : ViewModel() {
+class EventViewModel : ViewModel() {
 
     private val service = EventService()
     private val mEvents = MutableLiveData<List<Event>>()
@@ -50,13 +48,13 @@ class EventViewModel  : ViewModel() {
         get() = _image
 
 
-    fun getEvent(id : Int){
+    fun getEvent(id : Int?){
         viewModelScope.launch {
             val response = service.getEvents()
 
             if (response.isSuccessful) {
-                    mEvents.value = response.body()
-                val event = withContext(Dispatchers.Default) { mEvents.value!![id] }
+                mEvents.value = response.body()
+                val event = withContext(Dispatchers.Default) { mEvents.value!![id!!] }
                 _date.value = getDateTime(event.date)
                 _title.value = event.title
                 _price.value = getPrice(event.price)
@@ -68,15 +66,6 @@ class EventViewModel  : ViewModel() {
                 image.set(event.image)
             }
         }
-    }
-
-    fun shareButton(view : View, context: Context, bundle: Bundle){
-        val shareIntent = Intent().apply {
-            this.action = Intent.ACTION_SEND
-            this.putExtra(Intent.EXTRA_TEXT, "lala" )
-            this.type = "text/plain"
-        }
-        startActivity(context, shareIntent, bundle)
     }
 
     private fun getDateTime(s: Long): String? {
