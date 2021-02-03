@@ -83,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:drawableLeft="@drawable/ic_baseline_calendar_today_24"
-                    android:text="4 de dezembro de 1999 14:00"
+                    android:text="@{viewModel.date}"
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -94,11 +94,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:layout_marginLeft="20dp"
-                    android:autoLink="web"
+                    android:text="@{viewModel.title}"
                     android:textColor="@color/teal_700"
                     android:textSize="24sp"
-                    android:textStyle="bold"
-                    app:mutableText="@{viewModel.getUrlText()}"/>
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/event_price"
@@ -106,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:layout_marginLeft="20dp"
-                    android:text="R$ 29,99"
+                    android:text="@{viewModel.price}"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold"/>
@@ -116,7 +115,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:text="O Patas Dadas estará na Redenção, nesse domingo, com cães para adoção e produtos à venda! Na ocasião, teremos bottons, bloquinhos e camisetas! Traga seu Pet, os amigos e o chima, e venha aproveitar esse dia de sol com a gente e com alguns de nossos peludinhos - que estarão prontinhos para ganhar o ♥ de um humano bem legal pra chamar de seu. Aceitaremos todos os tipos de doação: - guias e coleiras em bom estado - ração (as que mais precisamos no momento são sênior e filhote) - roupinhas - cobertas - remédios dentro do prazo de validade"
+                    android:text="@{viewModel.description}"
                     android:textAlignment="gravity"
                     android:textColor="@color/black" />
                 <fragment

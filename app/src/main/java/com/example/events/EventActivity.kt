@@ -2,6 +2,7 @@ package com.example.events
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -19,17 +20,17 @@ import kotlinx.android.synthetic.main.activity_main.*
 class EventActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var binding: ActivityEventBinding
-    lateinit var viewModel: EventViewModel
+    private val viewModel: EventViewModel by viewModels()
     private lateinit var mMap: GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_event)
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
 
-        viewModel = ViewModelProvider(this)
-            .get(EventViewModel::class.java)
-
-        viewModel.getEvent(1)
+        val position = intent.getIntExtra("position", 1)
+        viewModel.getEvent(position)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
