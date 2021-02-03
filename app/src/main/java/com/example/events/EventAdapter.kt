@@ -28,9 +28,9 @@ class EventAdapter(private val items: ArrayList<Event>) : RecyclerView.Adapter<E
                 val intent = Intent(view?.context, EventActivity::class.java)
                 intent.putExtra("position", position)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    //Go to activity API 19.
-                } else {
                     view?.context?.startActivity(intent)
+                } else {
+                    //Go to activity API 19.
                 }
             }
         }

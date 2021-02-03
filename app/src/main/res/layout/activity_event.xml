@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<layout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.events.EventViewModel" />
+    </data>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EventActivity">
@@ -88,10 +94,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:layout_marginLeft="20dp"
-                    android:text="Feira de adoção de animais na Redenção"
+                    android:autoLink="web"
                     android:textColor="@color/teal_700"
                     android:textSize="24sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    app:mutableText="@{viewModel.getUrlText()}"/>
 
                 <TextView
                     android:id="@+id/event_price"
@@ -148,3 +155,4 @@
         app:layout_anchorGravity="bottom|end|right"
         app:maxImageSize="28dp"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

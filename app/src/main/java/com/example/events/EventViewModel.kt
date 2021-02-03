@@ -1,5 +1,7 @@
 package com.example.events
 
+import android.widget.TextView
+import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,36 +15,31 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class EventViewModel : ViewModel(), OnMapReadyCallback {
+class EventViewModel : ViewModel() {
 
-    private lateinit var mMap: GoogleMap
     private val service = EventService()
     private val mEvents = MutableLiveData<List<Event>>()
 
 
+    val titleText: MutableLiveData<String> = MutableLiveData()
+    val urlText: MutableLiveData<String> = MutableLiveData()
+    val sourceText: MutableLiveData<String> = MutableLiveData()
+    val resultImageUrl = ObservableField<String>()
     val events: LiveData<List<Event>>
         get() = mEvents
 
-    fun getEvent(id : Int) : Event{
+    fun getEvent(id : Int){
         viewModelScope.launch(Dispatchers.IO) {
             val response = service.getEvents()
 
             if (response.isSuccessful) {
                 withContext(Dispatchers.Main) {
                     mEvents.value = response.body()
+                    urlText.postValue(mEvents.value!![id].date.toString())
+
                 }
             }
         }
-        return mEvents.value!![id]
-    }
-
-    override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
 
 }
