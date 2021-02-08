@@ -12,8 +12,9 @@ import com.google.android.gms.maps.GoogleMap
 
 class EventActivity : AppCompatActivity() {
 
-    private lateinit var mMap: GoogleMap
+
     private val viewModel: EventViewModel by viewModels()
+    private lateinit var binding: ActivityEventBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,9 +24,9 @@ class EventActivity : AppCompatActivity() {
                 .commitNow()
         }
 
-        val binding : ActivityEventBinding = DataBindingUtil.setContentView(
-            this,
-            R.layout.event_activity2_activity)
+        binding = ActivityEventBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
 
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
